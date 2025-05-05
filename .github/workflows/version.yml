@@ -1,7 +1,11 @@
-name: CI
+name: Send Terms to Kinesis
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
     paths:
       - "terms.md"
   workflow_dispatch:
