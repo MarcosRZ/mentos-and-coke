@@ -28,7 +28,7 @@ jobs:
 
       - name: Create event
         run: |
-             | aws kinesis put-record \
-              --stream-name your-stream-name \
-              --partition-key your-partition-key \
-              --data "{\"version\": \"${{steps.version_step.outputs.data}}\", \"terms\": \"${{steps.terms_step.outputs.data}}\"}"
+          aws kinesis put-record \
+          --stream-name your-stream-name \
+          --partition-key your-partition-key \
+          --data "{\"version\": \"${{steps.version_step.outputs.data}}\", \"terms\": \"${{steps.terms_step.outputs.data}}\"}"
