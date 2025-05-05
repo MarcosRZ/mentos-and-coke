@@ -1,4 +1,4 @@
-name: CI
+name: Send Terms to Kinesis
 
 on:
   pull_request:
