@@ -24,8 +24,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Read file
-        id: set_var
+      - name: Read config
+        id: set_version
         run: |
           content=`cat ./dev.config`
           # the following lines are only required for multi line json
@@ -35,4 +35,17 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=config::$content"
       - run: |
-          echo "${{fromJson(steps.set_var.outputs.config).termsOfService.version}}"
+          version="${{fromJson(steps.set_config.outputs.config).termsOfService.version}}"
+
+      - name: Read Terms text
+        id: set_terms_text
+        run: |
+          terms=`cat ./terms.txt`
+
+      - name: Create event
+        id: create_event
+        run: |
+          json=$(jq -n --arg version "$version" --arg terms "$terms" '{version: $version, terms: $terms}')
+          echo "$json"
+          
+      
