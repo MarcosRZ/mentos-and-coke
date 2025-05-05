@@ -22,7 +22,7 @@ jobs:
       - name: Read Terms text
         id: terms_step
         run: |
-          terms=$(cat ./terms.md | base64)
+          terms=$(cat ./terms.md | base64 -w 0)
           echo "terms=$terms" >> $GITHUB_OUTPUT
 
       - name: Create event
