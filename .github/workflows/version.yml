@@ -44,7 +44,8 @@ jobs:
       - name: Create event
         id: create_event
         run: |
-          json=$(jq -n --arg version "$version" --arg terms "$terms" '{version: $version, terms: $terms}')
-          echo "$json"
+          # json=$(jq -n --arg version "$version" --arg terms "$terms" '{version: $version, terms: $terms}')
+          json=${{ "version": "$version", "terms": "$terms" }}
+          echo json
           
       
