@@ -1,7 +1,11 @@
 name: CI
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
     paths:
       - "terms.md"
   workflow_dispatch:
