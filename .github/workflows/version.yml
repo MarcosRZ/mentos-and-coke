@@ -16,7 +16,7 @@ jobs:
       - name: Read config version
         id: version_step
         run: |
-          version=$(jq -r '.termsOfService.version' ./dev.config)
+          version=$(jq -r '.version' ./dev.config)
           echo "data=$version" >> $GITHUB_OUTPUT
 
       - name: Read Terms text
