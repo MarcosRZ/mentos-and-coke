@@ -27,5 +27,6 @@ jobs:
 
       - name: Create event
         run: |
+          dterms=${{steps.terms_step.outputs.data}} | base64 -d
           echo "La versión es ${{ steps.version_step.outputs.data }}"
-          echo "Los terms son: ${{ steps.terms_step.outputs.data | base64 -d }}"
+          echo "Los terms son: $dterms"
