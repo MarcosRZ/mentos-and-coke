@@ -39,7 +39,7 @@ jobs:
       - name: Read Terms text
         id: terms
         run: |
-          terms=`cat ./terms.txt`
+          terms=`cat ./terms.md`
 
       - name: Create event
         id: create_event
