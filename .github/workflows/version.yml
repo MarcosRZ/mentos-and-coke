@@ -34,8 +34,7 @@ jobs:
           content="${content//$'\r'/'%0D'}"
           # end of optional handling for multi line json
           echo "::set-output name=config::$content"
-      - run: |
-          version="${{fromJson(steps.set_config.outputs.config).termsOfService.version}}"
+      - run: version="${{fromJson(steps.set_config.outputs.config).termsOfService.version}}"
 
       - name: Read Terms text
         id: set_terms_text
