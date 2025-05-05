@@ -17,15 +17,15 @@ jobs:
         id: version_step
         run: |
           version=$(jq -r '.termsOfService.version' ./dev.config)
-          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "data=$version" >> $GITHUB_OUTPUT
 
       - name: Read Terms text
         id: terms_step
         run: |
           terms=$(cat ./terms.md | base64 -w 0)
-          echo "terms=$terms" >> $GITHUB_OUTPUT
+          echo "data=$terms" >> $GITHUB_OUTPUT
 
       - name: Create event
         run: |
-          echo "La versión es ${{ steps.version_step.outputs.version }}"
-          echo "Los terms son: ${{ steps.terms_step.outputs.terms }}" | base64 -d
+          echo "La versión es ${{ steps.version_step.outputs.data }}"
+          echo "Los terms son: ${{ steps.terms_step.outputs.data | base64 -d }}"
