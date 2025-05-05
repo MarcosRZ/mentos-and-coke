@@ -27,5 +27,4 @@ jobs:
 
       - name: Create event
         run: |
-          echo "La versión es ${{steps.version_step.outputs.data}}"
-          echo "Los terms son ${{steps.terms_step.outputs.data}}"
+          echo "{\"version\": \"${{steps.version_step.outputs.data}}\", \"terms\": \"${{steps.terms_step.outputs.data}}\"}"
