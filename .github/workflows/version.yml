@@ -21,6 +21,18 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - run: "cat dev.config"
+      - name: Read file
+        id: set_var
+        run: |
+          content=`cat ./dev.config`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=config::$content"
+      - run: |
+          echo "${{fromJson(steps.set_var.outputs.config).termsOfService.version}}"
