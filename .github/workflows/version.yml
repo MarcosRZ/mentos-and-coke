@@ -26,12 +26,8 @@ jobs:
         id: changed_files
         run: |
           FILES=$(git diff --name-only HEAD^1 HEAD)
-          echo "files=$FILES" >> $GITHUB_OUTPUT
-
-      - name: Check if $TERMS_PATH changed
-        run: |
-          echo "Changed files: ${{ steps.changed_files.outputs.files }}"
-          if echo "${{ steps.changed_files.outputs.files }}" | grep -q "$TERMS_PATH"; then
+          echo "Changed files: $FILES"
+          if echo $FILES | grep -q "$TERMS_PATH"; then
             echo "$TERMS_PATH was modified."
             echo "changes=true" >> $GITHUB_OUTPUT
           else
