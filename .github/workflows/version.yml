@@ -1,38 +1,44 @@
-name: Send Terms to Kinesis
+name: Send new terms of service to kinesis
 
 on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - master
-    paths:
-      - "terms.md"
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - Deploy - PRODUCTION
+    types:
+      - completed
 
 jobs:
-  build:
+  send-terms-to-kinesis:
     runs-on: ubuntu-latest
-
+    env:
+      STREAM_NAME: production
+      PARTITION_KEY: new_terms_of_service_version
+      AWS_REGION: us-east-1
+      TERMS_PATH: ./terms.md
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      - name: Read config version
-        id: version_step
+      - name: Detect changes in terms of service
         run: |
-          version=$(jq -r '.version' ./dev.config)
-          echo "data=$version" >> $GITHUB_OUTPUT
+          git fetch origin master
+          if ! git diff --name-only origin/master | grep -q "$TERMS_PATH"; then
+            echo "No changes in terms of service. Exiting."
+            exit 0
+          fi
 
-      - name: Read Terms text
-        id: terms_step
+      - name: Send event to Kinesis (Debug)
         run: |
-          terms=$(cat ./terms.md | base64 -w 0)
-          echo "data=$terms" >> $GITHUB_OUTPUT
+          TERMS=$(cat "$TERMS_PATH" | base64 -w 0)
+          PAYLOAD=$(jq -n --arg terms "$TERMS" --arg timestamp "$(date +%s)" '{timestamp: $timestamp, terms: $terms}')
 
-      - name: Create event
-        run: |
-          aws kinesis put-record \
-          --stream-name your-stream-name \
-          --partition-key your-partition-key \
-          --data "{\"version\": \"${{steps.version_step.outputs.data}}\", \"terms\": \"${{steps.terms_step.outputs.data}}\"}"
+          echo "STREAM_NAME: $STREAM_NAME"
+          echo "PARTITION_KEY: $PARTITION_KEY"
+          echo "AWS_REGION: $AWS_REGION"
+          echo "TERMS_PATH: $TERMS_PATH"
+          echo "TERMS: $TERMS"
+          echo "PAYLOAD: $PAYLOAD"
+
