@@ -26,12 +26,14 @@ jobs:
         run: |
           set -x
           git fetch origin master
-          if !  git diff --name-only origin/master | grep -q "$TERMS_PATH"; then
-            echo "No changes in terms of service. Exiting."
-            exit 0
+          if git diff --name-only origin/master | grep -q "$TERMS_PATH"; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Send event to Kinesis (Debug)
+        if: steps.detect_changes.outputs.changes == 'true'
         run: |
           TERMS=$(cat "$TERMS_PATH" | base64 -w 0)
           PAYLOAD=$(jq -n --arg terms "$TERMS" --arg timestamp "$(date +%s)" '{timestamp: $timestamp, terms: $terms}')
