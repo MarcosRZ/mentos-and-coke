@@ -25,7 +25,9 @@ jobs:
       - name: Detect changes in terms of service
         run: |
           git fetch origin master
-          if ! git diff --name-only origin/master | grep -q "$TERMS_PATH"; then
+          CHANGES=$(git diff --name-only origin/master | grep "$TERMS_PATH")
+          echo $CHANGES
+          if ! CHANGES then
             echo "No changes in terms of service. Exiting."
             exit 0
           fi
