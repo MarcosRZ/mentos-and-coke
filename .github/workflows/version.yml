@@ -15,7 +15,7 @@ jobs:
       STREAM_NAME: production
       PARTITION_KEY: new_terms_of_service_version
       AWS_REGION: us-east-1
-      TERMS_PATH: ./terms.md
+      TERMS_PATH: src/views/terms-of-service/index.html
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
