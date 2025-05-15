@@ -22,13 +22,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get files changed since last release
+      - name: Check TOS changes since last release
         id: detect_changes
         run: |
           CURRENT=$(git tag --sort=-creatordate | head -n 2 | sed -n '1p')
           PREVIOUS=$(git tag --sort=-creatordate | head -n 2 | sed -n '2p')
           FILES=$(git diff --name-only $PREVIOUS $CURRENT)
-          echo "Changed files: $FILES"
+          echo "Files changed between $PREVIOUS and $CURRENT:"
+          echo "$FILES"
           if echo $FILES | grep -q "$TERMS_PATH"; then
             echo "$TERMS_PATH was modified."
             echo "changes=true" >> $GITHUB_OUTPUT
