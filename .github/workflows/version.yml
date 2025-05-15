@@ -24,7 +24,7 @@ jobs:
 
       - name: Detect changes in terms of service
         run: |
-          set -X
+          set -x
           pwd
           git fetch origin master
           git diff --name-only origin/master | grep "$TERMS_PATH"
