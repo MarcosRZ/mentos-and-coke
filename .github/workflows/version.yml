@@ -22,10 +22,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get changed files
+      - name: Get files changed since last release
         id: detect_changes
         run: |
-          FILES=$(git diff --name-only HEAD^1 HEAD)
+          CURRENT=$(git tag --sort=-creatordate | head -n 2 | sed -n '1p')
+          PREVIOUS=$(git tag --sort=-creatordate | head -n 2 | sed -n '2p')
+          FILES=$(git diff --name-only $PREVIOUS $CURRENT)
           echo "Changed files: $FILES"
           if echo $FILES | grep -q "$TERMS_PATH"; then
             echo "$TERMS_PATH was modified."
@@ -35,18 +37,6 @@ jobs:
             echo "changes=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-
-      # - name: Detect changes in terms of service
-      #   run: |
-      #     set -x
-      #     git fetch origin master
-      #     if git diff --name-only origin/master | grep -q "$TERMS_PATH"; then
-      #       echo "Changes detected in terms of service."
-      #       echo "changes=true" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "No changes detected."
-      #       echo "changes=false" >> $GITHUB_OUTPUT
-      #     fi
 
       - name: Send event to Kinesis (Debug)
         if: steps.detect_changes.outputs.changes == 'true'
