@@ -25,7 +25,7 @@ jobs:
       - name: Get changed files
         id: changed_files
         run: |
-          FILES=$(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA)
+          FILES=$(git diff --name-only HEAD^1 HEAD)
           echo "files=$FILES" >> $GITHUB_OUTPUT
 
       - name: Check if $TERMS_PATH changed
