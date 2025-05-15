@@ -27,7 +27,7 @@ jobs:
           git fetch origin master
           CHANGES=$(git diff --name-only origin/master | grep "$TERMS_PATH")
           echo $CHANGES
-          if ! $CHANGES then
+          if ! [ -z "$CHANGES" ]; then
             echo "No changes in terms of service. Exiting."
             exit 0
           fi
