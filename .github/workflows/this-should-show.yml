@@ -1,0 +1,19 @@
+
+name: THIS SHOULD SHOW
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - actions-test
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create comment
+        run: |
+          echo "⚠️ This is a test 💣"
+          exit 0
