@@ -3,9 +3,6 @@ name: THIS SHOULD SHOW
 
 on:
   workflow_dispatch:
-  push:
-    branches: 
-      - actions-test
 
 jobs:
   test:
