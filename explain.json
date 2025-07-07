@@ -1,0 +1,643 @@
+{
+  "explainVersion": "1",
+  "stages": [
+    {
+      "$cursor": {
+        "queryPlanner": {
+          "namespace": "paysite.favouritevideos",
+          "indexFilterSet": false,
+          "parsedQuery": {
+            "$and": [
+              {
+                "userId": {
+                  "$eq": "67e176f0000100016dc1bb3d"
+                }
+              },
+              {
+                "brand": {
+                  "$in": [
+                    "channels",
+                    "vixenplus"
+                  ]
+                }
+              }
+            ]
+          },
+          "queryHash": "876A3D1A",
+          "planCacheKey": "31B33CBD",
+          "maxIndexedOrSolutionsReached": false,
+          "maxIndexedAndSolutionsReached": false,
+          "maxScansToExplodeReached": false,
+          "winningPlan": {
+            "stage": "PROJECTION_SIMPLE",
+            "transformBy": {
+              "updatedAt": 1,
+              "video": 1,
+              "videoId": 1,
+              "_id": 0
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "inputStage": {
+                "stage": "IXSCAN",
+                "keyPattern": {
+                  "userId": 1,
+                  "brand": 1
+                },
+                "indexName": "userId_1_brand_1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "userId": [],
+                  "brand": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "userId": [
+                    "[\"67e176f0000100016dc1bb3d\", \"67e176f0000100016dc1bb3d\"]"
+                  ],
+                  "brand": [
+                    "[\"channels\", \"channels\"]",
+                    "[\"vixenplus\", \"vixenplus\"]"
+                  ]
+                }
+              }
+            }
+          },
+          "rejectedPlans": [
+            {
+              "stage": "PROJECTION_SIMPLE",
+              "transformBy": {
+                "updatedAt": 1,
+                "video": 1,
+                "videoId": 1,
+                "_id": 0
+              },
+              "inputStage": {
+                "stage": "FETCH",
+                "inputStage": {
+                  "stage": "IXSCAN",
+                  "keyPattern": {
+                    "userId": 1,
+                    "updatedAt": -1,
+                    "brand": 1
+                  },
+                  "indexName": "userId_1_updatedAt_-1_brand_1",
+                  "isMultiKey": false,
+                  "multiKeyPaths": {
+                    "userId": [],
+                    "updatedAt": [],
+                    "brand": []
+                  },
+                  "isUnique": false,
+                  "isSparse": false,
+                  "isPartial": false,
+                  "indexVersion": 2,
+                  "direction": "forward",
+                  "indexBounds": {
+                    "userId": [
+                      "[\"67e176f0000100016dc1bb3d\", \"67e176f0000100016dc1bb3d\"]"
+                    ],
+                    "updatedAt": [
+                      "[MaxKey, MinKey]"
+                    ],
+                    "brand": [
+                      "[\"channels\", \"channels\"]",
+                      "[\"vixenplus\", \"vixenplus\"]"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "executionStats": {
+          "executionSuccess": true,
+          "nReturned": 1893,
+          "executionTimeMillis": 64,
+          "totalKeysExamined": 1895,
+          "totalDocsExamined": 1893,
+          "executionStages": {
+            "stage": "PROJECTION_SIMPLE",
+            "nReturned": 1893,
+            "executionTimeMillisEstimate": 1,
+            "works": 1895,
+            "advanced": 1893,
+            "needTime": 1,
+            "needYield": 0,
+            "saveState": 3,
+            "restoreState": 3,
+            "isEOF": 1,
+            "transformBy": {
+              "updatedAt": 1,
+              "video": 1,
+              "videoId": 1,
+              "_id": 0
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "nReturned": 1893,
+              "executionTimeMillisEstimate": 1,
+              "works": 1895,
+              "advanced": 1893,
+              "needTime": 1,
+              "needYield": 0,
+              "saveState": 3,
+              "restoreState": 3,
+              "isEOF": 1,
+              "docsExamined": 1893,
+              "alreadyHasObj": 0,
+              "inputStage": {
+                "stage": "IXSCAN",
+                "nReturned": 1893,
+                "executionTimeMillisEstimate": 1,
+                "works": 1895,
+                "advanced": 1893,
+                "needTime": 1,
+                "needYield": 0,
+                "saveState": 3,
+                "restoreState": 3,
+                "isEOF": 1,
+                "keyPattern": {
+                  "userId": 1,
+                  "brand": 1
+                },
+                "indexName": "userId_1_brand_1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "userId": [],
+                  "brand": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "userId": [
+                    "[\"67e176f0000100016dc1bb3d\", \"67e176f0000100016dc1bb3d\"]"
+                  ],
+                  "brand": [
+                    "[\"channels\", \"channels\"]",
+                    "[\"vixenplus\", \"vixenplus\"]"
+                  ]
+                },
+                "keysExamined": 1895,
+                "seeks": 2,
+                "dupsTested": 0,
+                "dupsDropped": 0
+              }
+            }
+          },
+          "allPlansExecution": [
+            {
+              "nReturned": 101,
+              "executionTimeMillisEstimate": 0,
+              "totalKeysExamined": 101,
+              "totalDocsExamined": 101,
+              "score": 2.0002,
+              "executionStages": {
+                "stage": "PROJECTION_SIMPLE",
+                "nReturned": 101,
+                "executionTimeMillisEstimate": 0,
+                "works": 101,
+                "advanced": 101,
+                "needTime": 0,
+                "needYield": 0,
+                "saveState": 1,
+                "restoreState": 0,
+                "isEOF": 0,
+                "transformBy": {
+                  "updatedAt": 1,
+                  "video": 1,
+                  "videoId": 1,
+                  "_id": 0
+                },
+                "inputStage": {
+                  "stage": "FETCH",
+                  "nReturned": 101,
+                  "executionTimeMillisEstimate": 0,
+                  "works": 101,
+                  "advanced": 101,
+                  "needTime": 0,
+                  "needYield": 0,
+                  "saveState": 1,
+                  "restoreState": 0,
+                  "isEOF": 0,
+                  "docsExamined": 101,
+                  "alreadyHasObj": 0,
+                  "inputStage": {
+                    "stage": "IXSCAN",
+                    "nReturned": 101,
+                    "executionTimeMillisEstimate": 0,
+                    "works": 101,
+                    "advanced": 101,
+                    "needTime": 0,
+                    "needYield": 0,
+                    "saveState": 1,
+                    "restoreState": 0,
+                    "isEOF": 0,
+                    "keyPattern": {
+                      "userId": 1,
+                      "brand": 1
+                    },
+                    "indexName": "userId_1_brand_1",
+                    "isMultiKey": false,
+                    "multiKeyPaths": {
+                      "userId": [],
+                      "brand": []
+                    },
+                    "isUnique": false,
+                    "isSparse": false,
+                    "isPartial": false,
+                    "indexVersion": 2,
+                    "direction": "forward",
+                    "indexBounds": {
+                      "userId": [
+                        "[\"67e176f0000100016dc1bb3d\", \"67e176f0000100016dc1bb3d\"]"
+                      ],
+                      "brand": [
+                        "[\"channels\", \"channels\"]",
+                        "[\"vixenplus\", \"vixenplus\"]"
+                      ]
+                    },
+                    "keysExamined": 101,
+                    "seeks": 1,
+                    "dupsTested": 0,
+                    "dupsDropped": 0
+                  }
+                }
+              }
+            },
+            {
+              "nReturned": 94,
+              "executionTimeMillisEstimate": 0,
+              "totalKeysExamined": 101,
+              "totalDocsExamined": 94,
+              "score": 1.9308930693069306,
+              "executionStages": {
+                "stage": "PROJECTION_SIMPLE",
+                "nReturned": 94,
+                "executionTimeMillisEstimate": 0,
+                "works": 101,
+                "advanced": 94,
+                "needTime": 7,
+                "needYield": 0,
+                "saveState": 1,
+                "restoreState": 0,
+                "isEOF": 0,
+                "transformBy": {
+                  "updatedAt": 1,
+                  "video": 1,
+                  "videoId": 1,
+                  "_id": 0
+                },
+                "inputStage": {
+                  "stage": "FETCH",
+                  "nReturned": 94,
+                  "executionTimeMillisEstimate": 0,
+                  "works": 101,
+                  "advanced": 94,
+                  "needTime": 7,
+                  "needYield": 0,
+                  "saveState": 1,
+                  "restoreState": 0,
+                  "isEOF": 0,
+                  "docsExamined": 94,
+                  "alreadyHasObj": 0,
+                  "inputStage": {
+                    "stage": "IXSCAN",
+                    "nReturned": 94,
+                    "executionTimeMillisEstimate": 0,
+                    "works": 101,
+                    "advanced": 94,
+                    "needTime": 7,
+                    "needYield": 0,
+                    "saveState": 1,
+                    "restoreState": 0,
+                    "isEOF": 0,
+                    "keyPattern": {
+                      "userId": 1,
+                      "updatedAt": -1,
+                      "brand": 1
+                    },
+                    "indexName": "userId_1_updatedAt_-1_brand_1",
+                    "isMultiKey": false,
+                    "multiKeyPaths": {
+                      "userId": [],
+                      "updatedAt": [],
+                      "brand": []
+                    },
+                    "isUnique": false,
+                    "isSparse": false,
+                    "isPartial": false,
+                    "indexVersion": 2,
+                    "direction": "forward",
+                    "indexBounds": {
+                      "userId": [
+                        "[\"67e176f0000100016dc1bb3d\", \"67e176f0000100016dc1bb3d\"]"
+                      ],
+                      "updatedAt": [
+                        "[MaxKey, MinKey]"
+                      ],
+                      "brand": [
+                        "[\"channels\", \"channels\"]",
+                        "[\"vixenplus\", \"vixenplus\"]"
+                      ]
+                    },
+                    "keysExamined": 101,
+                    "seeks": 8,
+                    "dupsTested": 0,
+                    "dupsDropped": 0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "nReturned": 1893,
+      "executionTimeMillisEstimate": 3
+    },
+    {
+      "$lookup": {
+        "from": "videos",
+        "as": "video",
+        "localField": "videoId",
+        "foreignField": "videoId",
+        "let": {},
+        "pipeline": [
+          {
+            "$match": {
+              "$or": [
+                {
+                  "channelInfo": {
+                    "$eq": null
+                  }
+                },
+                {
+                  "channelInfo.isThirdPartyChannel": {
+                    "$eq": false
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "unwinding": {
+          "preserveNullAndEmptyArrays": false
+        }
+      },
+      "totalDocsExamined": 1892,
+      "totalKeysExamined": 1892,
+      "collectionScans": 0,
+      "indexesUsed": [
+        "videoId_1"
+      ],
+      "nReturned": 498,
+      "executionTimeMillisEstimate": 63
+    },
+    {
+      "$facet": {
+        "data": [
+          {
+            "$internalFacetTeeConsumer": {},
+            "nReturned": 498,
+            "executionTimeMillisEstimate": 63
+          },
+          {
+            "$sort": {
+              "sortKey": {
+                "updatedAt": -1
+              },
+              "limit": 12
+            },
+            "totalDataSizeSortedBytesEstimate": 3705075,
+            "usedDisk": false,
+            "spills": 0,
+            "nReturned": 12,
+            "executionTimeMillisEstimate": 63
+          },
+          {
+            "$replaceRoot": {
+              "newRoot": "$video"
+            },
+            "nReturned": 12,
+            "executionTimeMillisEstimate": 63
+          },
+          {
+            "$project": {
+              "_id": true,
+              "id": true,
+              "models": true,
+              "slug": true,
+              "targetUrl": true,
+              "images": true,
+              "previews": true,
+              "newId": true,
+              "videoUrl1080P": true,
+              "previewVideoUrl1080P": true,
+              "primarySite": true,
+              "downloadDate": true,
+              "previewDate": true,
+              "releaseDate": true,
+              "directors": true,
+              "runLength": true,
+              "runLengthForDisplay": true,
+              "description": true,
+              "descriptionHtml": true,
+              "categories": true,
+              "tags": true,
+              "title": true,
+              "isUpcoming": true,
+              "picturesInSet": true,
+              "showcaseData": true,
+              "chapters": true,
+              "channelInfo": true,
+              "timelineThumbs": true,
+              "videoSize480P": true,
+              "videoSize720P": true,
+              "videoSize1080P": true,
+              "videoSize2160P": true,
+              "videoSizeMobile270P": true,
+              "videoSizeMobile360P": true,
+              "videoSizeMobile480P": true,
+              "xvsVideo": true,
+              "freeVideoMA": true,
+              "expertReview": true,
+              "freeLimitedTrialSites": true
+            },
+            "nReturned": 12,
+            "executionTimeMillisEstimate": 63
+          }
+        ],
+        "totalCount": [
+          {
+            "$internalFacetTeeConsumer": {},
+            "nReturned": 498,
+            "executionTimeMillisEstimate": 0
+          },
+          {
+            "$group": {
+              "_id": {
+                "$const": null
+              },
+              "count": {
+                "$sum": {
+                  "$const": 1
+                }
+              }
+            },
+            "maxAccumulatorMemoryUsageBytes": {
+              "count": 80
+            },
+            "totalOutputDataSizeBytes": 245,
+            "usedDisk": false,
+            "spills": 0,
+            "nReturned": 1,
+            "executionTimeMillisEstimate": 0
+          },
+          {
+            "$project": {
+              "count": true,
+              "_id": false
+            },
+            "nReturned": 1,
+            "executionTimeMillisEstimate": 0
+          }
+        ]
+      },
+      "nReturned": 1,
+      "executionTimeMillisEstimate": 63
+    }
+  ],
+  "serverInfo": {
+    "host": "983ab6b6da6f",
+    "port": 27017,
+    "version": "6.0.17",
+    "gitVersion": "1b0ca02043c6d35d5cfdc91e21fc00a05d901539"
+  },
+  "serverParameters": {
+    "internalQueryFacetBufferSizeBytes": 104857600,
+    "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+    "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+    "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+    "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+    "internalQueryProhibitBlockingMergeOnMongoS": 0,
+    "internalQueryMaxAddToSetBytes": 104857600,
+    "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600
+  },
+  "command": {
+    "aggregate": "favouritevideos",
+    "pipeline": [
+      {
+        "$match": {
+          "userId": "67e176f0000100016dc1bb3d",
+          "brand": {
+            "$in": [
+              "vixenplus",
+              "channels"
+            ]
+          }
+        }
+      },
+      {
+        "$lookup": {
+          "from": "videos",
+          "localField": "videoId",
+          "foreignField": "videoId",
+          "as": "video"
+        }
+      },
+      {
+        "$unwind": "$video"
+      },
+      {
+        "$match": {
+          "$or": [
+            {
+              "video.channelInfo": null
+            },
+            {
+              "video.channelInfo.isThirdPartyChannel": false
+            }
+          ]
+        }
+      },
+      {
+        "$facet": {
+          "data": [
+            {
+              "$sort": {
+                "updatedAt": -1
+              }
+            },
+            {
+              "$replaceWith": "$video"
+            },
+            {
+              "$skip": 0
+            },
+            {
+              "$limit": 12
+            },
+            {
+              "$project": {
+                "id": 1,
+                "models": 1,
+                "slug": 1,
+                "targetUrl": 1,
+                "images": 1,
+                "previews": 1,
+                "newId": 1,
+                "videoUrl1080P": 1,
+                "previewVideoUrl1080P": 1,
+                "primarySite": 1,
+                "downloadDate": 1,
+                "previewDate": 1,
+                "releaseDate": 1,
+                "directors": 1,
+                "runLength": 1,
+                "runLengthForDisplay": 1,
+                "description": 1,
+                "descriptionHtml": 1,
+                "categories": 1,
+                "tags": 1,
+                "title": 1,
+                "isUpcoming": 1,
+                "picturesInSet": 1,
+                "showcaseData": 1,
+                "chapters": 1,
+                "channelInfo": 1,
+                "timelineThumbs": 1,
+                "videoSize480P": 1,
+                "videoSize720P": 1,
+                "videoSize1080P": 1,
+                "videoSize2160P": 1,
+                "videoSizeMobile270P": 1,
+                "videoSizeMobile360P": 1,
+                "videoSizeMobile480P": 1,
+                "xvsVideo": 1,
+                "freeVideoMA": 1,
+                "expertReview": 1,
+                "freeLimitedTrialSites": 1
+              }
+            }
+          ],
+          "totalCount": [
+            {
+              "$count": "count"
+            }
+          ]
+        }
+      }
+    ],
+    "cursor": {},
+    "$db": "paysite"
+  },
+  "ok": 1
+}
+✅ Done

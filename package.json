@@ -1,0 +1,24 @@
+{
+  "name": "mentos-and-coke",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "read.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@marcosrz:marcosrz/mentos-and-coke.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^6.16.0",
+    "promisify": "^0.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
