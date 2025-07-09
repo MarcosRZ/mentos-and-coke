@@ -76,10 +76,9 @@ jobs:
           
           if [[ "$CURRENT" == "$BASE" ]]; then
             echo "version_updated=false" >> $GITHUB_OUTPUT
-            echo "❌ Terms of Service changed but version was not updated"
-            echo "Please update the version in the meta tag before merging"
+            echo "❌ Terms of Service contents changed but version was not updated in ${{ env.TOS_FILE_PATH }}. Please update the version in the meta tag before merging"
             exit 1
           else
             echo "version_updated=true" >> $GITHUB_OUTPUT
-            echo "✅ Version has been updated"
+            echo "✅ Terms of service version has been updated"
           fi
