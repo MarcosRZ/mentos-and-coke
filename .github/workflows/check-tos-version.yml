@@ -9,6 +9,9 @@ permissions:
   contents: read
   pull-requests: write
 
+env:
+  TOS_FILE_PATH: src/views/terms-of-service/index.html
+
 jobs:
   check-tos-version:
     runs-on: ubuntu-latest
@@ -22,7 +25,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
-          files: src/views/terms-of-service/index.html
+          files: ${{ env.TOS_FILE_PATH }}
 
       - name: Check if TOS changed
         id: tos-changed
@@ -39,15 +42,20 @@ jobs:
         if: steps.tos-changed.outputs.tos_changed == 'true'
         id: extract-versions
         run: |
+          # Function to extract version from TOS file
+          extract_version() {
+            grep -o 'name="version"[^>]*content="[^"]*"' "${{ env.TOS_FILE_PATH }}" | grep -o 'content="[^"]*"' | sed 's/content="//;s/"//'
+          }
+          
           # Extract current version
-          CURRENT_VERSION=$(grep -o 'content="[^"]*"' src/views/terms-of-service/index.html | head -1 | sed 's/content="//;s/"//')
+          CURRENT_VERSION=$(extract_version)
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "Current version: $CURRENT_VERSION"
           
           # Extract base version
           git checkout ${{ github.event.pull_request.base.sha }}
-          if [ -f "src/views/terms-of-service/index.html" ]; then
-            BASE_VERSION=$(grep -o 'content="[^"]*"' src/views/terms-of-service/index.html | head -1 | sed 's/content="//;s/"//')
+          if [ -f "${{ env.TOS_FILE_PATH }}" ]; then
+            BASE_VERSION=$(extract_version)
           else
             BASE_VERSION="file_not_exists"
           fi
