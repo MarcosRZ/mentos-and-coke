@@ -1,8 +1,7 @@
-name: Check Terms of Service Version
+name: Check ToS Version Update
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 permissions:
