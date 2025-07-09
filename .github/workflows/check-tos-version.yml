@@ -57,7 +57,7 @@ jobs:
           echo "Base version: $BASE_VERSION"
           git checkout ${{ github.event.pull_request.head.sha }}
 
-      - name: Compare versions
+      - name: Compare versions and fail if not updated
         if: steps.tos-changed.outputs.tos_changed == 'true'
         id: version-check
         run: |
@@ -70,15 +70,10 @@ jobs:
           
           if [[ "$CURRENT" == "$BASE" ]]; then
             echo "version_updated=false" >> $GITHUB_OUTPUT
-            echo "❌ Version has NOT been updated"
+            echo "❌ Terms of Service changed but version was not updated"
+            echo "Please update the version in the meta tag before merging"
+            exit 1
           else
             echo "version_updated=true" >> $GITHUB_OUTPUT
             echo "✅ Version has been updated"
           fi
-
-      - name: Fail if version not updated
-        if: steps.tos-changed.outputs.tos_changed == 'true' && steps.version-check.outputs.version_updated == 'false'
-        run: |
-          echo "❌ Terms of Service changed but version was not updated"
-          echo "Please update the version in the meta tag before merging"
-          exit 1
