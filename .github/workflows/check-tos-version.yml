@@ -35,18 +35,16 @@ jobs:
             echo "Terms of Service file has not been modified"
           fi
 
-      - name: Extract version from current branch
+      - name: Extract versions from both branches
         if: steps.tos-changed.outputs.tos_changed == 'true'
-        id: current-version
+        id: extract-versions
         run: |
+          # Extract current version
           CURRENT_VERSION=$(grep -o 'content="[^"]*"' src/views/terms-of-service/index.html | head -1 | sed 's/content="//;s/"//')
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "Current version: $CURRENT_VERSION"
-
-      - name: Extract version from base branch
-        if: steps.tos-changed.outputs.tos_changed == 'true'
-        id: base-version
-        run: |
+          
+          # Extract base version
           git checkout ${{ github.event.pull_request.base.sha }}
           if [ -f "src/views/terms-of-service/index.html" ]; then
             BASE_VERSION=$(grep -o 'content="[^"]*"' src/views/terms-of-service/index.html | head -1 | sed 's/content="//;s/"//')
@@ -61,8 +59,8 @@ jobs:
         if: steps.tos-changed.outputs.tos_changed == 'true'
         id: version-check
         run: |
-          CURRENT="${{ steps.current-version.outputs.current_version }}"
-          BASE="${{ steps.base-version.outputs.base_version }}"
+          CURRENT="${{ steps.extract-versions.outputs.current_version }}"
+          BASE="${{ steps.extract-versions.outputs.base_version }}"
           
           echo "Comparing versions:"
           echo "Base version: '$BASE'"
