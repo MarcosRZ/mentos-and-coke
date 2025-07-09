@@ -9,6 +9,9 @@ permissions:
   contents: read
   pull-requests: write
 
+env:
+  TOS_FILE_PATH: src/views/terms-of-service/index.html
+
 jobs:
   check-tos-version:
     runs-on: ubuntu-latest
@@ -22,7 +25,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
-          files: src/views/terms-of-service/index.html
+          files: ${{ env.TOS_FILE_PATH }}
 
       - name: Check if TOS changed
         id: tos-changed
@@ -35,21 +38,24 @@ jobs:
             echo "Terms of Service file has not been modified"
           fi
 
-      - name: Extract version from current branch
+      - name: Extract versions from both branches
         if: steps.tos-changed.outputs.tos_changed == 'true'
-        id: current-version
+        id: extract-versions
         run: |
-          CURRENT_VERSION=$(grep -o 'content="[^"]*"' src/views/terms-of-service/index.html | head -1 | sed 's/content="//;s/"//')
+          # Function to extract version from TOS file
+          extract_version() {
+            grep -o 'name="version"[^>]*content="[^"]*"' "${{ env.TOS_FILE_PATH }}" | grep -o 'content="[^"]*"' | sed 's/content="//;s/"//'
+          }
+          
+          # Extract current version
+          CURRENT_VERSION=$(extract_version)
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "Current version: $CURRENT_VERSION"
-
-      - name: Extract version from base branch
-        if: steps.tos-changed.outputs.tos_changed == 'true'
-        id: base-version
-        run: |
+          
+          # Extract base version
           git checkout ${{ github.event.pull_request.base.sha }}
-          if [ -f "src/views/terms-of-service/index.html" ]; then
-            BASE_VERSION=$(grep -o 'content="[^"]*"' src/views/terms-of-service/index.html | head -1 | sed 's/content="//;s/"//')
+          if [ -f "${{ env.TOS_FILE_PATH }}" ]; then
+            BASE_VERSION=$(extract_version)
           else
             BASE_VERSION="file_not_exists"
           fi
@@ -57,12 +63,12 @@ jobs:
           echo "Base version: $BASE_VERSION"
           git checkout ${{ github.event.pull_request.head.sha }}
 
-      - name: Compare versions
+      - name: Compare versions and fail if not updated
         if: steps.tos-changed.outputs.tos_changed == 'true'
         id: version-check
         run: |
-          CURRENT="${{ steps.current-version.outputs.current_version }}"
-          BASE="${{ steps.base-version.outputs.base_version }}"
+          CURRENT="${{ steps.extract-versions.outputs.current_version }}"
+          BASE="${{ steps.extract-versions.outputs.base_version }}"
           
           echo "Comparing versions:"
           echo "Base version: '$BASE'"
@@ -70,65 +76,9 @@ jobs:
           
           if [[ "$CURRENT" == "$BASE" ]]; then
             echo "version_updated=false" >> $GITHUB_OUTPUT
-            echo "❌ Version has NOT been updated"
+            echo "❌ Terms of Service contents changed but version was not updated in ${{ env.TOS_FILE_PATH }}. Please update the version in the meta tag before merging"
+            exit 1
           else
             echo "version_updated=true" >> $GITHUB_OUTPUT
-            echo "✅ Version has been updated"
+            echo "✅ Terms of service version has been updated"
           fi
-
-      - name: Comment on PR if version not updated
-        if: steps.tos-changed.outputs.tos_changed == 'true' && steps.version-check.outputs.version_updated == 'false'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
-
-            const botCommentExists = comments.some(comment => 
-              comment.user.type === 'Bot' && 
-              comment.body.includes('Terms of Service version needs to be updated')
-            );
-
-            if (!botCommentExists) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: `⚠️ Terms of Service Version Update Required
-              });
-            }
-
-      - name: Add success comment if version updated
-        if: steps.tos-changed.outputs.tos_changed == 'true' && steps.version-check.outputs.version_updated == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
-
-            const successCommentExists = comments.some(comment => 
-              comment.user.type === 'Bot' && 
-              comment.body.includes('Terms of Service version has been properly updated')
-            );
-
-            if (!successCommentExists) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: `## ✅ Terms of Service Version Updated
-              });
-            }
-
-      - name: Fail if version not updated
-        if: steps.tos-changed.outputs.tos_changed == 'true' && steps.version-check.outputs.version_updated == 'false'
-        run: |
-          echo "❌ Terms of Service changed but version was not updated"
-          echo "Please update the version in the meta tag before merging"
-          exit 1
