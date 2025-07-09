@@ -96,19 +96,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                body: `## ⚠️ Terms of Service Version Update Required
-
-The Terms of Service file (\`src/views/terms-of-service/index.html\`) has been modified in this PR, but the version in the meta tag has not been updated.
-
-**Current version:** \`${{ steps.current-version.outputs.current_version }}\`
-**Previous version:** \`${{ steps.base-version.outputs.base_version }}\`
-
-Please update the version in the meta tag:
-\`\`\`html
-<meta name="version" content="NEW_VERSION" />
-\`\`\`
-
-This ensures proper tracking of Terms of Service changes and compliance requirements.`
+                body: `⚠️ Terms of Service Version Update Required
               });
             }
 
@@ -134,13 +122,6 @@ This ensures proper tracking of Terms of Service changes and compliance requirem
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
                 body: `## ✅ Terms of Service Version Updated
-
-Great! The Terms of Service has been modified and the version has been properly updated.
-
-**Previous version:** \`${{ steps.base-version.outputs.base_version }}\`
-**New version:** \`${{ steps.current-version.outputs.current_version }}\`
-
-This change will be tracked for compliance purposes.`
               });
             }
 
